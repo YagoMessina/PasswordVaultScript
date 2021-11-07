@@ -9,16 +9,16 @@ public enum Action {
         public void execute(String[] args, Repository repository) {
             String name = args[1].toUpperCase();
             String password = args[2];
-            repository.save(name, new Password(password));
+            repository.save(name, new Password(password, true));
         }
     },
     GET{
         @Override
         public void execute(String[] args, Repository repository) {
             String name = args[1].toUpperCase();
-            String password = repository.search(name);
+            Password password = repository.search(name);
             if (password != null) {
-                ClipboardUtils.copyToClipboard(password);
+                ClipboardUtils.copyToClipboard(password.getDecrypted());
                 System.out.println("Copiada al portapapeles! :)");
             } else {
                 System.out.println("No se encontró la contraseña :_(");

@@ -1,15 +1,23 @@
 package com.Super.entity;
 
+import com.Super.util.PasswordUtils;
+
 public class Password {
 
-    private String password;
+  private String password;
 
-    public Password(String password) {
-        this.password = password;
+  public Password(String password, boolean encrypt) {
+    this.password = password;
+    if (encrypt) {
+      this.password = PasswordUtils.encrypt(password);
     }
+  }
 
-    @Override
-    public String toString() {
-        return password;
-    }
+  public String getEncrypted() {
+    return password;
+  }
+
+  public String getDecrypted() {
+    return PasswordUtils.decrypt(password);
+  }
 }
