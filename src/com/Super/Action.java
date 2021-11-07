@@ -1,11 +1,10 @@
 package com.Super;
 
-import com.Super.entity.Password;
+import com.Super.entity.Registry;
 import com.Super.util.ClipboardUtils;
 import com.Super.util.PasswordUtils;
 
 public enum Action {
-
   SET{
     @Override
     public void execute(String[] args) {
@@ -13,21 +12,20 @@ public enum Action {
       String password = args[2];
 
       if (password.equals("--random") || password.equals("--r")) {
-        repository.save(name, PasswordUtils.randomPassword());
-        return;
+        password = PasswordUtils.randomPassword();
       }
 
-      repository.save(name, new Password(password, true));
+      Registry registry = new Registry(name, password);
+      repository.save(registry);
     }
   },
-
   GET{
     @Override
     public void execute(String[] args) {
       String name = args[1].toUpperCase();
-      Password password = repository.search(name);
-      if (password != null) {
-        ClipboardUtils.copyToClipboard(password.getDecrypted());
+      Registry registry = repository.search(name);
+      if (registry != null) {
+        ClipboardUtils.copyToClipboard(registry.getPasswordDecrypted());
         System.out.println("Copiada al portapapeles! :)");
       } else {
         System.out.println("No se encontró la contraseña :_(");

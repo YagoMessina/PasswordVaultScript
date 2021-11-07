@@ -2,22 +2,31 @@ package com.Super.entity;
 
 import com.Super.util.PasswordUtils;
 
-public class Password {
+class Password {
 
-  private String password;
+  private final String password;
 
-  public Password(String password, boolean encrypt) {
-    this.password = password;
-    if (encrypt) {
-      this.password = PasswordUtils.encrypt(password);
-    }
+  private final String key;
+
+  Password(String password) {
+    this.key = PasswordUtils.generateKey();
+    this.password = PasswordUtils.encrypt(password, key);
   }
 
-  public String getEncrypted() {
+  Password(String password, String key) {
+    this.key = key;
+    this.password = password;
+  }
+
+  String getKey() {
+    return key;
+  }
+
+  String encrypted() {
     return password;
   }
 
-  public String getDecrypted() {
-    return PasswordUtils.decrypt(password);
+  String decrypted() {
+    return PasswordUtils.decrypt(password, key);
   }
 }

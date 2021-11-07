@@ -1,14 +1,12 @@
 package com.Super;
 
-import com.Super.entity.Password;
+import com.Super.entity.Registry;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class Repository {
@@ -17,7 +15,7 @@ public class Repository {
 
   public Repository() {
     Map<String, String> env = System.getenv();
-    File file = new File(env.get("COMMANDS") + "/passwords.txt");
+    File file = new File(env.get("COMMANDS") + "/passwords.dat");
     try {
       file.createNewFile();
     }catch (IOException e) {
@@ -26,32 +24,30 @@ public class Repository {
     path = Paths.get(file.getPath());
   }
 
-  public void save(String name, Password password) {
-    String line = name + "," + password.getEncrypted() + "\n";
+  public void save(Registry registry) {
     try {
-      Files.write(path, line.getBytes(), StandardOpenOption.APPEND);
+      OutputStream out = Files.newOutputStream(path, StandardOpenOption.APPEND);
+      DataOutputStream outputStream = new DataOutputStream(out);
+      outputStream.writeUTF(String.valueOf(registry));
+      outputStream.close();
     } catch (IOException e) {
-      System.out.println("No se pudo guardar la contraseña de" + name);
+      System.out.println(
+        "No se pudo guardar la contraseña de" + registry.getName());
     }
   }
 
-  private List<String> read() {
-    List<String> lines = new ArrayList<>();
-    try {
-      lines = Files.readAllLines(path);
+  public Registry search(String name) {
+    try (DataInputStream inputStream
+           = new DataInputStream(Files.newInputStream(path))) {
+      while (inputStream.available() > 0) {
+        Registry registry = Registry.fromString(inputStream.readUTF());
+
+        if(registry.getName().equals(name)){
+          return registry;
+        }
+      }
     } catch (IOException e) {
       e.printStackTrace();
-    }
-    return lines;
-  }
-
-  public Password search(String name) {
-    List<String> lines = read();
-    for (String line : lines) {
-      if(line.startsWith(name)){
-        int pos = line.indexOf(",") + 1;
-        return new Password(line.substring(pos), false);
-      }
     }
     return null;
   }
