@@ -26,16 +26,14 @@ public class PasswordUtils {
     return new String(decoder.decode(password));
   }
 
-  public static Password randomPassword(boolean useSymbols) {
+  public static Password randomPassword() {
     Random random = new Random();
     int passwordLength = 20;
     List<String> charsets = new ArrayList<>();
     charsets.add("ZXCVBNMASDFGHJKLQWERTYUIOP");
     charsets.add("zxcvbnmasdfghjklqwertyuiop");
     charsets.add("1234567890");
-    if (useSymbols) {
-      charsets.add("!@#$%^&*_+?");
-    }
+    charsets.add("!@#$%^&*_+?");
 
     StringBuilder password = new StringBuilder();
     for (int i = 0; i < passwordLength; ++i) {

@@ -15,6 +15,6 @@ public class Main {
       System.out.println("La acción no es válida");
       System.exit(-1);
     }
-    action.execute(args, new Repository());
+    action.execute(args);
   }
 }

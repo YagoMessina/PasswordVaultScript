@@ -55,7 +55,7 @@ class PasswordUtilsTest {
 
   @Test
   public void generatePassword_withSymbols() {
-    Password password = PasswordUtils.randomPassword(true);
+    Password password = PasswordUtils.randomPassword();
 
     assertNotNull(password);
     assertEquals(password.getDecrypted().length(), 20);
