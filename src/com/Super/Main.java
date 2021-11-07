@@ -1,24 +1,22 @@
 package com.Super;
 
 import com.Super.entity.Password;
-import org.omg.CORBA.RepositoryIdHelper;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class Main {
 
     public static void main(String[] args) {
-//        String p1 = args[0];
-//        String p2 = args[1];
-//        String p3 = args[2];
-//        p1 = p1.toUpperCase();
-//        if(p1.equals(Action.SET.name())) {
-//
-//        }else if (p1.equals(Action.GET.name())) {
-//
-//        }
-        Repository repository = new Repository();
-        repository.save("sda", new Password("asd"));
+        if (args.length == 0) {
+            System.out.println();
+            System.out.println("Comandos disponibles:");
+            System.out.println("set <alias> <contraseña>");
+            System.out.println("get <alias>");
+            System.exit(0);
+        }
+        Action action = Action.toAction(args[0].toUpperCase());
+        if (action == null) {
+            System.out.println("La acción no es válida");
+            System.exit(-1);
+        }
+        action.execute(args, new Repository());
     }
 }

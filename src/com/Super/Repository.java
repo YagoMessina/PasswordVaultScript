@@ -44,4 +44,15 @@ public class Repository {
         }
         return lines;
     }
+
+    public String search(String name) {
+        List<String> lines = read();
+        for (String line : lines) {
+            if(line.startsWith(name)){
+                int pos = line.indexOf(",") + 1;
+                return line.substring(pos);
+            }
+        }
+        return null;
+    }
 }
